@@ -14,6 +14,9 @@ RUN apt-get update && apt-get install -y \
       apt-get clean && \
       rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
+# Install npm
+RUN apt-get update && apt-get install -y npm
+
 COPY ./app/php.ini /usr/local/etc/php/conf.d/php.ini
 
 # Install composer
@@ -23,3 +26,6 @@ RUN curl -sS https://getcomposer.org/installer | php -- \
     --install-dir=/usr/local/bin
 
 WORKDIR /var/www
+
+# Run npm run dev as the startup command
+CMD [ "npm", "run", "dev" ]
