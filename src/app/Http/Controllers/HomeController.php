@@ -92,14 +92,30 @@ class HomeController extends Controller
     {
         $builderId = $request->input('builder_id');
 
-        $builder = Builder::find($builderId);
+        if($builderId){
+            $builder = Builder::find($builderId);
 
-        return response()->json([
-            'city' => $builder->city,
-            'street' => $builder->street,
-            'building_number' => $builder->building_number,
-            'wallType' => $builder->wallType,
-            'heating' => $builder->heating
-        ]);
+            return response()->json([
+                'city' => $builder->city,
+                'street' => $builder->street,
+                'building_number' => $builder->building_number,
+                'wallType' => $builder->wallType,
+                'heating' => $builder->heating
+            ]);
+        } else {
+            $street = $request->input('street');
+            $building_number = $request->input('building_number');
+
+            $builder = Builder::where('street', $street)
+                ->where('building_number', $building_number)
+                ->first();
+
+            if ($builder) {
+                return response()->json($builder);
+            } else {
+                return response()->json(null);
+            }
+        }
+
     }
 }
